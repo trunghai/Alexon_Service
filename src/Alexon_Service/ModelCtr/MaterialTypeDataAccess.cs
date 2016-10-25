@@ -42,5 +42,29 @@ namespace Alexon_Service.ModelCtr
             
             return entity;
         }
+
+        public Entity updateMaterialType(String code, String name)
+        {
+            Entity entity = new Entity();
+            List<DbParameter> parameterList = new List<DbParameter>();
+            DbParameter codeParams = base.GetParameter("@CODE", code);
+            DbParameter nameParams = base.GetParameter("@NAME", name);
+            parameterList.Add(codeParams);
+            parameterList.Add(nameParams);
+
+            try
+            {
+                base.ExecuteNonQuery("PROC_ADD_MATERIAL_TYPE", parameterList, CommandType.StoredProcedure);
+                entity.respCode = "0";
+                entity.respContent = "Thêm mới thành công";
+            }
+            catch (Exception e)
+            {
+                entity.respCode = "10";
+                entity.respContent = "Thêm mới không thành công";
+            }
+
+            return entity;
+        }
     }
 }
