@@ -10,5 +10,6 @@ namespace Alexon_Service.Models
         public String respCode { get; set; }
         public String respContent { get; set; }
         public Object info { get; set; } 
+        public List<Object> listInfo { get; set; }
     }
 }

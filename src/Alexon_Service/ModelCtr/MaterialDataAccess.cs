@@ -16,6 +16,54 @@ namespace Alexon_Service.ModelCtr
         {
         }
 
+        public Entity getMaterials(int page, int pageSize, String codeMaterialType)
+        {
+            Entity entity = new Entity();
+            List<Material> listMaterial = new List<Material>();
+
+            List<DbParameter> parameterList = new List<DbParameter>();
+            DbParameter pageParamter = base.GetParameterOut("PAGE", SqlDbType.Int, page);
+            DbParameter pageSizeParamter = base.GetParameterOut("PAGE", SqlDbType.Int, pageSize);
+            DbParameter codeParamter = base.GetParameterOut("PAGE", SqlDbType.NVarChar, codeMaterialType);
+
+            parameterList.Add(pageParamter);
+            parameterList.Add(pageSizeParamter);
+            parameterList.Add(codeParamter);
+
+            using (DbDataReader dataReader = base.GetDataReader("PROC_GET_MATERIALS", parameterList, CommandType.StoredProcedure))
+            {
+                if (dataReader != null && dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        Material materail = new Material();
+                        materail.code = (string)dataReader["CODE"];
+                        materail.name = (string)dataReader["NAME"];
+                        materail.code_material_type = (string)dataReader["CODE_MATERIAL_TYPE"];
+                        materail.unit = (string)dataReader["UNIT"];
+                        materail.production_countries = (string)dataReader["PRODUCTION_COUNTRIES"];
+                        materail.code_symbols = (string)dataReader["CODE_SYMBOLS"];
+                        materail.number = (string)dataReader["NUMBER"];
+                        materail.capacity = (string)dataReader["CAPACITY"];
+                        materail.in_use = (string)dataReader["IN_USE"];
+                        materail.position = (string)dataReader["POSITION"];
+                        materail.moi_dat_de = (string)dataReader["MOI_DAT_DE"];
+                        materail.status = (string)dataReader["STATUS"];
+                        materail.source = (string)dataReader["SOURCE"];
+                        materail.quantity = (string)dataReader["QUANTITY"];
+                        materail.note = (string)dataReader["NOTE"];
+                        materail.original_price = (string)dataReader["ORIGINAL_PRICE"];
+
+                        listMaterial.Add(materail);
+                    }
+                }
+            }
+            entity.listInfo.AddRange(listMaterial.ToArray());
+            entity.respCode = "0";
+            entity.respContent = "Thành công";
+            return entity;
+        }
+
         public Entity addMaterial(Material material)
         {
             Entity entity = new Entity();
@@ -78,6 +126,10 @@ namespace Alexon_Service.ModelCtr
             XmlNode nameNode = xmlDoc.CreateElement("name");
             nameNode.InnerText = material.name;
             materialNode.AppendChild(nameNode);
+
+            XmlNode codeMaterailTypeNode = xmlDoc.CreateElement("code_material_type");
+            codeMaterailTypeNode.InnerText = material.name;
+            materialNode.AppendChild(codeMaterailTypeNode);
 
             XmlNode unitNode = xmlDoc.CreateElement("unit");
             unitNode.InnerText = material.unit;
