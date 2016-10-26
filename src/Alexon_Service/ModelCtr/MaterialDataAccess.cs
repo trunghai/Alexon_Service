@@ -16,15 +16,15 @@ namespace Alexon_Service.ModelCtr
         {
         }
 
-        public Entity getMaterials(int page, int pageSize, String codeMaterialType)
+        public Entity getMaterials(String page, String pageSize, String codeMaterialType)
         {
             Entity entity = new Entity();
             List<Material> listMaterial = new List<Material>();
 
             List<DbParameter> parameterList = new List<DbParameter>();
-            DbParameter pageParamter = base.GetParameterOut("PAGE", SqlDbType.Int, page);
-            DbParameter pageSizeParamter = base.GetParameterOut("PAGE", SqlDbType.Int, pageSize);
-            DbParameter codeParamter = base.GetParameterOut("PAGE", SqlDbType.NVarChar, codeMaterialType);
+            DbParameter pageParamter = base.GetParameterOut("@PAGE", SqlDbType.Int, page, ParameterDirection.Input);
+            DbParameter pageSizeParamter = base.GetParameterOut("@PAGESIZE", SqlDbType.Int, pageSize, ParameterDirection.Input);
+            DbParameter codeParamter = base.GetParameterOut("@CODE_MATERIAL_TYPE", SqlDbType.NVarChar, codeMaterialType, ParameterDirection.Input);
 
             parameterList.Add(pageParamter);
             parameterList.Add(pageSizeParamter);
@@ -44,21 +44,22 @@ namespace Alexon_Service.ModelCtr
                         materail.production_countries = (string)dataReader["PRODUCTION_COUNTRIES"];
                         materail.code_symbols = (string)dataReader["CODE_SYMBOLS"];
                         materail.number = (string)dataReader["NUMBER"];
-                        materail.capacity = (string)dataReader["CAPACITY"];
+                        materail.capacity = (string)dataReader["CAPACITY"].ToString();
                         materail.in_use = (string)dataReader["IN_USE"];
                         materail.position = (string)dataReader["POSITION"];
-                        materail.moi_dat_de = (string)dataReader["MOI_DAT_DE"];
-                        materail.status = (string)dataReader["STATUS"];
+                        materail.moi_dat_de = (string)dataReader["MOI_DAT_DE"].ToString();
+                        materail.status = (Int16)dataReader["STATUS"];
                         materail.source = (string)dataReader["SOURCE"];
-                        materail.quantity = (string)dataReader["QUANTITY"];
-                        materail.note = (string)dataReader["NOTE"];
-                        materail.original_price = (string)dataReader["ORIGINAL_PRICE"];
+                        materail.quantity = (Decimal)dataReader["QUANTITY"];
+                        materail.note = (string)dataReader["NOTE"].ToString();
+                        materail.original_price = (Decimal)dataReader["ORIGINAL_PRICE"];
 
                         listMaterial.Add(materail);
                     }
                 }
             }
-            entity.listInfo.AddRange(listMaterial.ToArray());
+            entity.listInfo = listMaterial.ToArray();
+             
             entity.respCode = "0";
             entity.respContent = "Thành công";
             return entity;
@@ -164,15 +165,23 @@ namespace Alexon_Service.ModelCtr
             materialNode.AppendChild(moi_dat_deNode);
 
             XmlNode statusNode = xmlDoc.CreateElement("status");
-            statusNode.InnerText = material.status;
+            statusNode.InnerText = material.status.ToString();
             materialNode.AppendChild(statusNode);
+
+            XmlNode noteNode = xmlDoc.CreateElement("note");
+            noteNode.InnerText = material.note.ToString();
+            materialNode.AppendChild(noteNode);
+
+            XmlNode originalPriceNode = xmlDoc.CreateElement("original_price");
+            originalPriceNode.InnerText = material.original_price.ToString();
+            materialNode.AppendChild(originalPriceNode);
 
             XmlNode sourceNode = xmlDoc.CreateElement("source");
             sourceNode.InnerText = material.source;
             materialNode.AppendChild(sourceNode);
 
             XmlNode quantityNode = xmlDoc.CreateElement("quantity");
-            quantityNode.InnerText = material.quantity;
+            quantityNode.InnerText = material.quantity.ToString();
             materialNode.AppendChild(quantityNode);
 
             rootNode.AppendChild(materialNode);

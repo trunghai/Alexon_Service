@@ -19,10 +19,10 @@ namespace Alexon_Service.Models
         public String position { get; set; }
         public String moi_dat_de { get; set; }
         public String note { get; set; }
-        public String original_price { get; set; }
-        public String status { get; set; }
+        public Decimal original_price { get; set; }
+        public Int16 status { get; set; }
         public String source { get; set; }
-        public String quantity { get; set; }
+        public Decimal quantity { get; set; }
         
 
 

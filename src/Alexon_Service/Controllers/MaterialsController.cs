@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Alexon_Service.Models;
 using Microsoft.Extensions.Options;
+using Alexon_Service.ModelCtr;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -21,9 +22,10 @@ namespace Alexon_Service.Controllers
         }
         // GET: api/values
         [HttpGet]
-        public IEnumerable<string> Get()
+        public Entity Get(String page, String pageSize, String codeMaterialType)
         {
-            return new string[] { "value1", "value2" };
+            MaterialDataAccess dataAccess = new MaterialDataAccess(_settings.ConnectionString);
+            return dataAccess.getMaterials(page, pageSize, codeMaterialType);
         }
 
         // GET api/values/5

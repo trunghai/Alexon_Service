@@ -35,7 +35,8 @@
           "Newtonsoft.Json": "9.0.1",
           "System.ComponentModel.Annotations": "4.1.0",
           "System.Data.Common": "4.1.0",
-          "System.Data.SqlClient": "4.1.0"
+          "System.Data.SqlClient": "4.1.0",
+          "System.Xml.XmlDocument": "4.0.1"
         },
         "compile": {
           "Alexon_Service.dll": {}
@@ -2763,6 +2764,9 @@
           "System.Text.Encoding": "4.0.11",
           "System.Threading": "4.0.11",
           "System.Xml.ReaderWriter": "4.0.11"
+        },
+        "compile": {
+          "ref/netstandard1.3/System.Xml.XmlDocument.dll": {}
         }
       },
       "System.Xml.XmlSerializer/4.0.11": {
@@ -2838,7 +2842,8 @@
           "Newtonsoft.Json": "9.0.1",
           "System.ComponentModel.Annotations": "4.1.0",
           "System.Data.Common": "4.1.0",
-          "System.Data.SqlClient": "4.1.0"
+          "System.Data.SqlClient": "4.1.0",
+          "System.Xml.XmlDocument": "4.0.1"
         },
         "runtime": {
           "Alexon_Service.dll": {}

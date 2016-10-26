@@ -185,6 +185,7 @@
 --reference:C:\Users\haidt1\.nuget\packages\System.Threading.Timer\4.0.1\ref\netstandard1.2\System.Threading.Timer.dll
 --reference:C:\Users\haidt1\.nuget\packages\System.Xml.ReaderWriter\4.0.11\ref\netstandard1.3\System.Xml.ReaderWriter.dll
 --reference:C:\Users\haidt1\.nuget\packages\System.Xml.XDocument\4.0.11\ref\netstandard1.3\System.Xml.XDocument.dll
+--reference:C:\Users\haidt1\.nuget\packages\System.Xml.XmlDocument\4.0.1\ref\netstandard1.3\System.Xml.XmlDocument.dll
 --reference:C:\Users\haidt1\.nuget\packages\System.Xml.XmlSerializer\4.0.11\ref\netstandard1.3\System.Xml.XmlSerializer.dll
 --resource:"D:\workspace C#\Alexon_Service\src\Alexon_Service\obj\Debug\netcoreapp1.0\Alexon_Servicedotnet-compile.deps.json",Alexon_Service.deps.json
 D:\workspace C#\Alexon_Service\src\Alexon_Service\Program.cs
