@@ -18,19 +18,19 @@ namespace Alexon_Service.Models
             set { _id = value; }
         }
 
-        public String tendonvi
+        public String name
         {
             get { return _tendonvi; }
             set { _tendonvi = value; }
         }
 
-        public String madonvi
+        public String code
         {
             get { return _madonvi; }
             set { _madonvi = value; }
         }
 
-        public String sdt
+        public String phone
         {
             get { return _sdt; }
             set { _sdt = value; }

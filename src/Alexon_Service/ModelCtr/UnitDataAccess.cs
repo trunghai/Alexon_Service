@@ -6,6 +6,7 @@ using System.Data;
 using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace Alexon_Service.ModelCtr
 {
@@ -15,32 +16,120 @@ namespace Alexon_Service.ModelCtr
         {
         }
 
-        public Entity addUnit(String madv, String tendv, String sdt)
+        public Entity getUnit()
         {
             Entity entity = new Entity();
-            Unit unit = new Unit();
+            List<Unit> listUnit = new List<Unit>();
+            List<DbParameter> parameterList = new List<DbParameter>();
+            using (DbDataReader dataReader = base.GetDataReader("PROC_GET_UNITS", parameterList, CommandType.StoredProcedure))
+            {
+                if (dataReader != null && dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        Unit unit = new Unit();
+                        unit.id = (int)dataReader["ID"];
+                        unit.code = (string)dataReader["CODE"];
+                        unit.name = (string)dataReader["NAME"];
+                        unit.phone = (string)dataReader["PHONE"].ToString();
+
+
+                        listUnit.Add(unit);
+                    }
+                }
+            }
+            entity.listInfo = listUnit.ToArray();
+
+            entity.respCode = "0";
+            entity.respContent = "Thành công";
+            return entity;
+        }
+
+        public Entity addUnit(Unit unit)
+        {
+            Entity entity = new Entity();
+
+            String xml = convertXMLUnit(unit);
 
             List<DbParameter> parameterList = new List<DbParameter>();
 
-            DbParameter madvParams = base.GetParameter("@MADONVI", unit.madonvi);
-            DbParameter tendvParams = base.GetParameter("@TENDONVI", unit.tendonvi);
-            DbParameter sdtParams = base.GetParameter("@SDT", unit.sdt);
+            DbParameter xmlParams = base.GetParameter("@xml", xml);
+            DbParameter ecodeParams = base.GetParameterOut("@ECODE", SqlDbType.NVarChar, ParameterDirection.Output);
+            DbParameter descParams = base.GetParameterOut("@DESC", SqlDbType.NVarChar, ParameterDirection.Output);
 
-            parameterList.Add(madvParams);
-            parameterList.Add(tendvParams);
-            parameterList.Add(sdtParams);
+            parameterList.Add(xmlParams);
+            parameterList.Add(ecodeParams);
+            parameterList.Add(descParams);
+            
 
-            base.ExecuteNonQuery("ADD_DONVI", parameterList, CommandType.StoredProcedure);
+            base.ExecuteNonQuery("PROC_ADD_UNIT", parameterList, CommandType.StoredProcedure);
 
-            unit.madonvi = (string)madvParams.Value;
-            unit.tendonvi = (string)tendvParams.Value;
-            unit.sdt = (string)sdtParams.Value;
+            //unit.code = (string)madvParams.Value;
+            //unit.tendonvi = (string)tendvParams.Value;
+            //unit.sdt = (string)sdtParams.Value;
 
-            entity.respCode = "0";
-            entity.respContent = "Giao dịch thành công";
+            entity.respCode = (string)ecodeParams.Value;
+            entity.respContent = (string)descParams.Value;
             entity.info = unit;
             return entity;
         }
 
+        public Entity updateUnit(int id, Unit unit)
+        {
+            Entity entity = new Entity();
+
+            String xml = convertXMLUnit(unit);
+
+            List<DbParameter> parameterList = new List<DbParameter>();
+
+            DbParameter xmlParams = base.GetParameter("@xml", xml);
+            DbParameter idParams = base.GetParameter("@ID", id);
+            DbParameter ecodeParams = base.GetParameterOut("@ECODE", SqlDbType.NVarChar, ParameterDirection.Output);
+            DbParameter descParams = base.GetParameterOut("@DESC", SqlDbType.NVarChar, ParameterDirection.Output);
+
+            parameterList.Add(xmlParams);
+            parameterList.Add(idParams);
+            parameterList.Add(ecodeParams);
+            parameterList.Add(descParams);
+
+
+            base.ExecuteNonQuery("PROC_UPDATE_UNIT", parameterList, CommandType.StoredProcedure);
+
+            //unit.code = (string)madvParams.Value;
+            //unit.tendonvi = (string)tendvParams.Value;
+            //unit.sdt = (string)sdtParams.Value;
+
+            entity.respCode = (string)ecodeParams.Value;
+            entity.respContent = (string)descParams.Value;
+            entity.info = unit;
+            return entity;
+        }
+
+        public String convertXMLUnit(Unit unit)
+        {
+            XmlDocument xmlDoc = new XmlDocument();
+            XmlNode rootNode = xmlDoc.CreateElement("root");
+            xmlDoc.AppendChild(rootNode);
+
+            XmlNode unitNode = xmlDoc.CreateElement("units");
+            rootNode.AppendChild(unitNode);
+
+            XmlNode codeNode = xmlDoc.CreateElement("code");
+            codeNode.InnerText = unit.code;
+            unitNode.AppendChild(codeNode);
+
+            XmlNode nameNode = xmlDoc.CreateElement("name");
+            nameNode.InnerText = unit.name;
+            unitNode.AppendChild(nameNode);
+
+            XmlNode phoneNode = xmlDoc.CreateElement("phone");
+            phoneNode.InnerText = unit.phone;
+            unitNode.AppendChild(phoneNode);
+
+            rootNode.AppendChild(unitNode);
+            xmlDoc.Save(Console.Out);
+            String xml = xmlDoc.OuterXml.ToString();
+            return xml;
+        }
     }
 }

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Alexon_Service.Models;
+using Microsoft.Extensions.Options;
+using Alexon_Service.ModelCtr;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -11,11 +14,19 @@ namespace Alexon_Service.Controllers
     [Route("api/[controller]")]
     public class UnitsController : Controller
     {
+
+        private AppSettings _settings;
+        public UnitsController(IOptions<AppSettings> settings)
+        {
+            _settings = settings.Value;
+        }
+
         // GET: api/values
         [HttpGet]
-        public IEnumerable<string> Get()
+        public Entity Get()
         {
-            return new string[] { "value1", "value2" };
+            UnitDataAccess dataAccess = new UnitDataAccess(_settings.ConnectionString);
+            return dataAccess.getUnit();
         }
 
         // GET api/values/5
@@ -27,16 +38,19 @@ namespace Alexon_Service.Controllers
 
         // POST api/values
         [HttpPost]
-        public String Post([FromBody]string value)
+        public Entity Post([FromBody]Unit value)
         {
-            String valu = value;
-            return "{ \"hai\" : \"1\" }";
+            UnitDataAccess dataAccess = new UnitDataAccess(_settings.ConnectionString);
+            return dataAccess.addUnit(value);
+            
         }
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public Entity Put(int id, [FromBody]Unit value)
         {
+            UnitDataAccess dataAccess = new UnitDataAccess(_settings.ConnectionString);
+            return dataAccess.updateUnit(id, value);
         }
 
         // DELETE api/values/5
