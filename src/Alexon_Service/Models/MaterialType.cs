@@ -8,6 +8,7 @@ namespace Alexon_Service.Models
 {
     public class MaterialType
     {
+        public int id { get; set; }
         [Required]
         public String code { get; set; }
         [Required]

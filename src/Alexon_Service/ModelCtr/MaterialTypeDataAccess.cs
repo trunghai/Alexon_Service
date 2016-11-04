@@ -16,6 +16,34 @@ namespace Alexon_Service.ModelCtr
         {
         }
 
+        public Entity getMaterialType()
+        {
+            Entity entity = new Entity();
+            List<MaterialType> listMaterialType = new List<MaterialType>();
+            List<DbParameter> parameterList = new List<DbParameter>();
+
+            using (DbDataReader dataReader = base.GetDataReader("PROC_GET_MATERIAL_TYPE", parameterList, CommandType.StoredProcedure))
+            {
+                if (dataReader != null && dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        MaterialType materail = new MaterialType();
+                        materail.id = (int)dataReader["ID"];
+                        materail.code = (string)dataReader["CODE"];
+                        materail.name = (string)dataReader["NAME"];
+                       
+                        listMaterialType.Add(materail);
+                    }
+                }
+            }
+            entity.listInfo = listMaterialType.ToArray();
+
+            entity.respCode = "0";
+            entity.respContent = "Thành công";
+            return entity;
+        }
+
         public Entity addMaterialType(String code, String name)
         {
             Entity entity = new Entity();

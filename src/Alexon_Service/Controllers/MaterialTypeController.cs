@@ -24,9 +24,10 @@ namespace Alexon_Service.Controllers
         }
         // GET: api/values
         [HttpGet]
-        public IEnumerable<string> Get()
+        public Entity Get()
         {
-            return new string[] { "value1", "value2" };
+            MaterialTypeDataAccess dataAccess = new MaterialTypeDataAccess(_settings.ConnectionString);
+            return dataAccess.getMaterialType();
         }
 
         // GET api/values/5

@@ -72,12 +72,16 @@ namespace Alexon_Service.ModelCtr
 
             List<DbParameter> parameterList = new List<DbParameter>();
             DbParameter xmlParams = base.GetParameter("@xml", xmlMaterial);
+            DbParameter codeParams = base.GetParameterOut("@ECODE", SqlDbType.NVarChar, null, ParameterDirection.Output);
+            DbParameter descParams = base.GetParameterOut("@DESC", SqlDbType.NVarChar, null, ParameterDirection.Output);
             parameterList.Add(xmlParams);
+            parameterList.Add(codeParams);
+            parameterList.Add(descParams);
             try
             {
                 base.ExecuteNonQuery("PROC_ADD_MATERIAL", parameterList, CommandType.StoredProcedure);
-                entity.respCode = "0";
-                entity.respContent = "Thêm mới thành công";
+                entity.respCode = (string)codeParams.Value;
+                entity.respContent = (string)descParams.Value;
             }
             catch (Exception e)
             {
@@ -129,7 +133,7 @@ namespace Alexon_Service.ModelCtr
             materialNode.AppendChild(nameNode);
 
             XmlNode codeMaterailTypeNode = xmlDoc.CreateElement("code_material_type");
-            codeMaterailTypeNode.InnerText = material.name;
+            codeMaterailTypeNode.InnerText = material.code_material_type;
             materialNode.AppendChild(codeMaterailTypeNode);
 
             XmlNode unitNode = xmlDoc.CreateElement("unit");

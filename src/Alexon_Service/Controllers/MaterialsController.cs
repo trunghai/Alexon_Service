@@ -37,8 +37,10 @@ namespace Alexon_Service.Controllers
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody]string value)
+        public IActionResult Post([FromBody]Material value)
         {
+            MaterialDataAccess dataAccess = new MaterialDataAccess(_settings.ConnectionString);
+            return Json(dataAccess.addMaterial(value));
         }
 
         // PUT api/values/5
