@@ -6,6 +6,7 @@ using System.Data;
 using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace Alexon_Service.ModelCtr
 {
@@ -15,45 +16,113 @@ namespace Alexon_Service.ModelCtr
         {
         }
 
-        public Entity login(String username, String password)
+        public Entity getUsers()
         {
-            Entity entity = new Entity();
-            
-            User user = new User();
-            user.session = Guid.NewGuid().ToString();
-            user.username = username;
-                     
-            
-
+            Entity entity = new Entity();     
+            List<User> listUser = new List<User>();      
             List<DbParameter> parameterList = new List<DbParameter>();
 
-            DbParameter userParams = base.GetParameter("@USER", user.username);
-            DbParameter passParams = base.GetParameter("@PASS", password);
-            DbParameter sessionParams = base.GetParameter("@SESSIONID", user.session);
+            using (DbDataReader dataReader = base.GetDataReader("PROC_GET_USERS", parameterList, CommandType.StoredProcedure))
+            {
+                if (dataReader != null && dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        User user = new User();
+                        user.id = (int)dataReader["ID"];
+                        user.username = (string)dataReader["IDUSER"].ToString();
+                        user.fullname = (string)dataReader["FULLNAME"].ToString();
+                        user.address = (string)dataReader["ADDRESS"].ToString();
+                        user.email = (string)dataReader["EMAIL"].ToString();
+                        user.salution = (string)dataReader["SALUTION"].ToString();
+                        user.phone = (string)dataReader["PHONENUMBER"].ToString();
+                        user.role = (string)dataReader["ROLE"].ToString();
+                        user.roleId = (int)dataReader["ROLE_ID"];
 
-            DbParameter fullnameParamter = base.GetParameterOut("@FULL_NAME", SqlDbType.NVarChar, "", ParameterDirection.Output);
-            DbParameter emailParamter = base.GetParameterOut("@EMAIL", SqlDbType.NVarChar, "", ParameterDirection.Output);
-            DbParameter addressParamter = base.GetParameterOut("@ADDRESS", SqlDbType.NVarChar, "", ParameterDirection.Output);
-        
-            parameterList.Add(userParams);
-            parameterList.Add(passParams);
-            parameterList.Add(sessionParams);
-
-            parameterList.Add(fullnameParamter);
-            parameterList.Add(emailParamter);
-            parameterList.Add(addressParamter);
-
-
-            base.ExecuteNonQuery("PROC_LOGIN", parameterList, CommandType.StoredProcedure);
-
-            user.fullname = (string)fullnameParamter.Value;
-            user.email = (string)emailParamter.Value;
-            user.address = (string)addressParamter.Value;
+                        listUser.Add(user);
+                    }
+                }
+            }
+            entity.listInfo = listUser.ToArray();
 
             entity.respCode = "0";
-            entity.respContent = "Giao dịch thành công";
-            entity.info = user;
+            entity.respContent = "Thành công";
             return entity;
+        }
+
+        public Entity addUser(User user)
+        {
+            Entity entity = new Entity();
+         
+            String xmlUser = convertXMLUser(user);
+
+            List<DbParameter> parameterList = new List<DbParameter>();
+            DbParameter xmlParams = base.GetParameter("@xml", xmlUser);
+            DbParameter codeParams = base.GetParameterOut("@ECODE", SqlDbType.NVarChar, null, ParameterDirection.Output);
+            DbParameter descParams = base.GetParameterOut("@DESC", SqlDbType.NVarChar, null, ParameterDirection.Output);
+            parameterList.Add(xmlParams);
+            parameterList.Add(codeParams);
+            parameterList.Add(descParams);
+            try
+            {
+                base.ExecuteNonQuery("PROC_ADD_USER", parameterList, CommandType.StoredProcedure);
+                entity.respCode = (string)codeParams.Value;
+                entity.respContent = (string)descParams.Value;
+            }
+            catch (Exception e)
+            {
+                entity.respCode = "10";
+                entity.respContent = "Thêm mới không thành công";
+            }
+
+            return entity;
+        }
+
+        public String convertXMLUser(User user)
+        {
+            XmlDocument xmlDoc = new XmlDocument();
+            XmlNode rootNode = xmlDoc.CreateElement("root");
+            xmlDoc.AppendChild(rootNode);
+
+            XmlNode userNode = xmlDoc.CreateElement("user");
+            rootNode.AppendChild(userNode);
+
+            XmlNode usernameNode = xmlDoc.CreateElement("username");
+            usernameNode.InnerText = user.username;
+            userNode.AppendChild(usernameNode);
+
+            XmlNode fullnameNode = xmlDoc.CreateElement("fullname");
+            fullnameNode.InnerText = user.fullname;
+            userNode.AppendChild(fullnameNode);
+
+            XmlNode emailNode = xmlDoc.CreateElement("email");
+            emailNode.InnerText = user.email;
+            userNode.AppendChild(emailNode);
+
+            XmlNode addressNode = xmlDoc.CreateElement("address");
+            addressNode.InnerText = user.address;
+            userNode.AppendChild(addressNode);
+
+            XmlNode phoneNode = xmlDoc.CreateElement("phone");
+            phoneNode.InnerText = user.phone;
+            userNode.AppendChild(phoneNode);
+
+            XmlNode roleIdNode = xmlDoc.CreateElement("roleId");
+            roleIdNode.InnerText = user.roleId.ToString();
+            userNode.AppendChild(roleIdNode);
+
+            XmlNode passwordNode = xmlDoc.CreateElement("password");
+            passwordNode.InnerText = user.password;
+            userNode.AppendChild(passwordNode);
+
+            XmlNode salutionNode = xmlDoc.CreateElement("salution");
+            salutionNode.InnerText = user.salution;
+            userNode.AppendChild(salutionNode);
+
+            rootNode.AppendChild(userNode);
+            xmlDoc.Save(Console.Out);
+            String xml = xmlDoc.OuterXml.ToString();
+            return xml;
         }
     }
 }

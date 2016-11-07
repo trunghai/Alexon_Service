@@ -14,6 +14,10 @@ namespace Alexon_Service.Models
         private String _email;
         private String _address;
         private String _phone;
+        private String _role;
+        private int _roleId;
+        private String _salution;
+        private String _password;
 
         public int id
         {
@@ -51,6 +55,26 @@ namespace Alexon_Service.Models
         {
             get { return _phone; }
             set { _phone = value; }
+        }
+        public String role
+        {
+            get { return _role; }
+            set { _role = value; }
+        }
+        public int roleId
+        {
+            get { return _roleId; }
+            set { _roleId = value; }
+        }
+        public String salution
+        {
+            get { return _salution; }
+            set { _salution = value; }
+        }
+        public String password
+        {
+            get { return _password; }
+            set { _password = value; }
         }
     }
 }

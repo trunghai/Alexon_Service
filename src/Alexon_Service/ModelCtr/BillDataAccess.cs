@@ -28,7 +28,7 @@ namespace Alexon_Service.ModelCtr
                     while (dataReader.Read())
                     {
                         Bill bill = new Bill();
-                        bill.code = (string)dataReader["CODE"];
+                        bill.code = (string)dataReader["CODE_BILLS"];
                         bill.code_material = (string)dataReader["CODE_MATERIAL"];
                         bill.code_unit = (string)dataReader["CODE_UNIT"];
                         bill.date_make = (string)dataReader["DATE_MAKE"];

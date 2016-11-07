@@ -23,11 +23,10 @@ namespace Alexon_Service.Controllers
 
         // GET: api/values
         [HttpGet]
-        public Entity Get(String username, String password) //IEnumerable<User>
+        public Entity Get() //IEnumerable<User>
         {
-            
             UserDataAccess data = new UserDataAccess(_settings.ConnectionString);
-            return data.login(username, password);
+            return data.getUsers();
             
         }
 
@@ -40,11 +39,11 @@ namespace Alexon_Service.Controllers
 
         // POST api/values
         [HttpPost]
-        public Entity Post([FromBody]string value)
+        public IActionResult Post([FromBody]User value)
         {
-            Console.WriteLine(value);
-            UserDataAccess data = new UserDataAccess("Server=ADMIN-PC;Database=Alexon;User ID=sa;Password=hongvan@1991;Trusted_Connection=False;");
-            return data.login("admin", "123456");
+            UserDataAccess dataAccess = new UserDataAccess(_settings.ConnectionString);
+            return Json(dataAccess.addUser(value));
+
         }
 
         // PUT api/values/5
