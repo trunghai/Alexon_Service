@@ -7,6 +7,7 @@ namespace Alexon_Service.Models
 {
     public class Material
     {
+        public int id { get; set; }
         public String code { get; set; }
         public String name { get; set; }
         public String code_material_type { get; set; }

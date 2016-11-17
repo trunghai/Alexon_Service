@@ -37,6 +37,7 @@ namespace Alexon_Service.ModelCtr
                     while (dataReader.Read())
                     {
                         Material materail = new Material();
+                        materail.id = (int)dataReader["ID"];
                         materail.code = (string)dataReader["CODE"];
                         materail.name = (string)dataReader["NAME"];
                         materail.code_material_type = (string)dataReader["CODE_MATERIAL_TYPE"];
@@ -99,12 +100,16 @@ namespace Alexon_Service.ModelCtr
 
             List<DbParameter> parameterList = new List<DbParameter>();
             DbParameter xmlParams = base.GetParameter("@xml", xmlMaterial);
+            DbParameter codeParams = base.GetParameterOut("@ECODE", SqlDbType.NVarChar, null, ParameterDirection.Output);
+            DbParameter descParams = base.GetParameterOut("@DESC", SqlDbType.NVarChar, null, ParameterDirection.Output);
             parameterList.Add(xmlParams);
+            parameterList.Add(codeParams);
+            parameterList.Add(descParams);
             try
             {
                 base.ExecuteNonQuery("PROC_UPDATE_MATERIAL", parameterList, CommandType.StoredProcedure);
-                entity.respCode = "0";
-                entity.respContent = "Thêm mới thành công";
+                entity.respCode = (string)codeParams.Value;
+                entity.respContent = (string)descParams.Value;
             }
             catch (Exception e)
             {

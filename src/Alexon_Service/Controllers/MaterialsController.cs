@@ -45,8 +45,10 @@ namespace Alexon_Service.Controllers
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public IActionResult Put(int id, [FromBody]Material value)
         {
+            MaterialDataAccess dataAccess = new MaterialDataAccess(_settings.ConnectionString);
+            return Json(dataAccess.updateMaterial(value));
         }
 
         // DELETE api/values/5
