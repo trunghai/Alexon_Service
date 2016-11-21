@@ -53,8 +53,10 @@ namespace Alexon_Service.Controllers
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
+            MaterialDataAccess dataAccess = new MaterialDataAccess(_settings.ConnectionString);
+            return Json(dataAccess.deleteMaterial(id));
         }
     }
 }
