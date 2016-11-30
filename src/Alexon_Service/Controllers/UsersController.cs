@@ -48,14 +48,18 @@ namespace Alexon_Service.Controllers
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public IActionResult Put(int id, [FromBody]User value)
         {
+            UserDataAccess dataAccess = new UserDataAccess(_settings.ConnectionString);
+            return Json(dataAccess.updateUser(value));
         }
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
+            UserDataAccess dataAccess = new UserDataAccess(_settings.ConnectionString);
+            return Json(dataAccess.deleteUser(id));
         }
     }
 }

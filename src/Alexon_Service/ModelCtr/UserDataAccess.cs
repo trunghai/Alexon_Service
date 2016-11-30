@@ -78,6 +78,57 @@ namespace Alexon_Service.ModelCtr
             return entity;
         }
 
+        public Entity updateUser(User user)
+        {
+            Entity entity = new Entity();     
+            String xmlUser = convertXMLUser(user);
+
+            List<DbParameter> parameterList = new List<DbParameter>();
+            DbParameter xmlParams = base.GetParameter("@xml", xmlUser);
+            DbParameter codeParams = base.GetParameterOut("@ECODE", SqlDbType.NVarChar, null, ParameterDirection.Output);
+            DbParameter descParams = base.GetParameterOut("@DESC", SqlDbType.NVarChar, null, ParameterDirection.Output);
+            parameterList.Add(xmlParams);
+            parameterList.Add(codeParams);
+            parameterList.Add(descParams);
+            try
+            {
+                base.ExecuteNonQuery("PROC_UPDATE_USER", parameterList, CommandType.StoredProcedure);
+                entity.respCode = (string)codeParams.Value;
+                entity.respContent = (string)descParams.Value;
+            }
+            catch (Exception e)
+            {
+                entity.respCode = "10";
+                entity.respContent = "Cập nhật không thành công";
+            }
+
+            return entity;
+        }
+
+        public Entity deleteUser(int id)
+        {
+            Entity entity = new Entity();
+            List<DbParameter> parameterList = new List<DbParameter>();
+            DbParameter idParams = base.GetParameterOut("@ID", SqlDbType.Int, id, ParameterDirection.Input);
+            DbParameter codeParams = base.GetParameterOut("@ECODE", SqlDbType.NVarChar, null, ParameterDirection.Output);
+            DbParameter descParams = base.GetParameterOut("@DESC", SqlDbType.NVarChar, null, ParameterDirection.Output);
+            parameterList.Add(idParams);
+            parameterList.Add(codeParams);
+            parameterList.Add(descParams);
+            try
+            {
+                base.ExecuteNonQuery("PROC_DELETE_USER", parameterList, CommandType.StoredProcedure);
+                entity.respCode = (string)codeParams.Value;
+                entity.respContent = (string)descParams.Value;
+            }
+            catch (Exception e)
+            {
+                entity.respCode = "10";
+                entity.respContent = "Xóa không thành công";
+            }
+            return entity;
+        }
+
         public String convertXMLUser(User user)
         {
             XmlDocument xmlDoc = new XmlDocument();
@@ -86,6 +137,10 @@ namespace Alexon_Service.ModelCtr
 
             XmlNode userNode = xmlDoc.CreateElement("user");
             rootNode.AppendChild(userNode);
+
+            XmlNode idNode = xmlDoc.CreateElement("id");
+            idNode.InnerText = user.id.ToString();
+            userNode.AppendChild(idNode);
 
             XmlNode usernameNode = xmlDoc.CreateElement("username");
             usernameNode.InnerText = user.username;
