@@ -55,8 +55,10 @@ namespace Alexon_Service.Controllers
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public Entity Delete(int id)
         {
+            UnitDataAccess dataAccess = new UnitDataAccess(_settings.ConnectionString);
+            return dataAccess.deleteUnit(id);
         }
     }
 }

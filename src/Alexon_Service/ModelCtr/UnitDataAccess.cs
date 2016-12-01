@@ -105,6 +105,30 @@ namespace Alexon_Service.ModelCtr
             return entity;
         }
 
+        public Entity deleteUnit(int id)
+        {
+            Entity entity = new Entity();
+            List<DbParameter> parameterList = new List<DbParameter>();
+            DbParameter idParams = base.GetParameterOut("@ID", SqlDbType.Int, id, ParameterDirection.Input);
+            DbParameter codeParams = base.GetParameterOut("@ECODE", SqlDbType.NVarChar, null, ParameterDirection.Output);
+            DbParameter descParams = base.GetParameterOut("@DESC", SqlDbType.NVarChar, null, ParameterDirection.Output);
+            parameterList.Add(idParams);
+            parameterList.Add(codeParams);
+            parameterList.Add(descParams);
+            try
+            {
+                base.ExecuteNonQuery("PROC_DELETE_UNIT", parameterList, CommandType.StoredProcedure);
+                entity.respCode = (string)codeParams.Value;
+                entity.respContent = (string)descParams.Value;
+            }
+            catch (Exception e)
+            {
+                entity.respCode = "10";
+                entity.respContent = "Xóa không thành công";
+            }
+            return entity;
+        }
+
         public String convertXMLUnit(Unit unit)
         {
             XmlDocument xmlDoc = new XmlDocument();

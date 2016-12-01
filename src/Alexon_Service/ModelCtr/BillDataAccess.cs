@@ -101,6 +101,10 @@ namespace Alexon_Service.ModelCtr
             unitNode.InnerText = bill.date_make;
             materialNode.AppendChild(unitNode);
 
+            XmlNode deliverNode = xmlDoc.CreateElement("deliver");
+            deliverNode.InnerText = bill.deliver;
+            materialNode.AppendChild(deliverNode);
+
             XmlNode receiverNode = xmlDoc.CreateElement("receiver");
             receiverNode.InnerText = bill.receiver;
             materialNode.AppendChild(receiverNode);

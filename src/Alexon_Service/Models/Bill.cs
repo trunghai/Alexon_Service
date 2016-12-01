@@ -14,6 +14,7 @@ namespace Alexon_Service.Models
         public String name_unit { get; set; }
         public String date_make { get; set; }
         public Decimal quantity { get; set; }
+        public String deliver { get; set; }
         public String receiver { get; set; }
         public String note { get; set; }
         
