@@ -24,10 +24,18 @@ namespace Alexon_Service.Controllers
 
         // GET: api/values
         [HttpGet]
-        public Entity Get()
+        public Entity Get(string codebill)
         {
-            BillDataAccess dataAccess = new BillDataAccess(_settings.ConnectionString);
-            return dataAccess.getBills();
+            if(codebill == null || codebill.Equals("0"))
+            {
+                BillDataAccess dataAccess = new BillDataAccess(_settings.ConnectionString);
+                return dataAccess.getBills();
+            }
+            else
+            {
+                BillDataAccess dataAccess = new BillDataAccess(_settings.ConnectionString);
+                return dataAccess.searchBill(codebill);
+            }
         }
 
         // GET api/values/5

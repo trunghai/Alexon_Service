@@ -49,6 +49,44 @@ namespace Alexon_Service.ModelCtr
             return entity;
         }
 
+        public Entity searchBill(string codeBill)
+        {
+            Entity entity = new Entity();
+            List<Bill> listBill = new List<Bill>();
+            List<DbParameter> parameterList = new List<DbParameter>();
+            DbParameter codeBillParams = base.GetParameter("@CODE_UNIT", codeBill);
+
+            parameterList.Add(codeBillParams);
+
+            using (DbDataReader dataReader = base.GetDataReader("PROC_SEARCH_BILL", parameterList, CommandType.StoredProcedure))
+            {
+                if (dataReader != null && dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        Bill bill = new Bill();
+                        bill.code = (string)dataReader["CODE_BILLS"];
+                        bill.code_material = (string)dataReader["CODE_MATERIAL"];
+                        bill.code_unit = (string)dataReader["CODE_UNIT"];
+                        bill.date_make = (string)dataReader["DATE_MAKE"];
+                        bill.receiver = (string)dataReader["RECEIVER"];
+                        bill.note = (string)dataReader["NOTE"];
+                        bill.quantity = (decimal)dataReader["QUANTITY"];
+                        bill.name_material = (string)dataReader["NAME_MATERIAL"];
+                        bill.name_unit = (string)dataReader["NAME_UNIT"];
+
+                        listBill.Add(bill);
+                    }
+                }
+            }
+            entity.listInfo = listBill.ToArray();
+
+            entity.respCode = "0";
+            entity.respContent = "Thành công";
+            return entity;
+        }
+
+
         public Entity addBill(Bill bill)
         {
             Entity entity = new Entity();
