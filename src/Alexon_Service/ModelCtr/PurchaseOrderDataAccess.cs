@@ -28,12 +28,12 @@ namespace Alexon_Service.ModelCtr
                     while (dataReader.Read())
                     {
                         PurchaseOrder purchaseOrder = new PurchaseOrder();
-                        purchaseOrder.code = (string)dataReader["CODE_BILLS"];
+                        purchaseOrder.code = (string)dataReader["CODE_PURCHASE_ORDERS"];
                         purchaseOrder.code_material = (string)dataReader["CODE_MATERIAL"];
-                        purchaseOrder.date_make = (string)dataReader["DATE_MAKE"];
+                        purchaseOrder.date_make = (DateTime)dataReader["DATE_MAKE"];
                         purchaseOrder.receiver = (string)dataReader["RECEIVER"];
-                        purchaseOrder.note = (string)dataReader["NOTE"];
-                        purchaseOrder.quantity = (decimal)dataReader["QUANTITY"];
+                        purchaseOrder.note = (string)dataReader["NOTE"].ToString();
+                        purchaseOrder.quantity = (int)dataReader["QUANTITY"];
                         purchaseOrder.name_material = (string)dataReader["NAME_MATERIAL"];
 
 
@@ -93,7 +93,7 @@ namespace Alexon_Service.ModelCtr
             materialNode.AppendChild(nameNode);       
 
             XmlNode unitNode = xmlDoc.CreateElement("date_make");
-            unitNode.InnerText = purchase.date_make;
+            unitNode.InnerText = purchase.date_make.ToString();
             materialNode.AppendChild(unitNode);       
 
             XmlNode receiverNode = xmlDoc.CreateElement("receiver");

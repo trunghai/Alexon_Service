@@ -32,8 +32,9 @@ namespace Alexon_Service.ModelCtr
                         bill.code_material = (string)dataReader["CODE_MATERIAL"];
                         bill.code_unit = (string)dataReader["CODE_UNIT"];
                         bill.date_make = (string)dataReader["DATE_MAKE"];
+                        bill.deliver = (string)dataReader["DELIVER"];
                         bill.receiver = (string)dataReader["RECEIVER"];
-                        bill.note = (string)dataReader["NOTE"];
+                        bill.note = (string)dataReader["NOTE"].ToString();
                         bill.quantity = (decimal)dataReader["QUANTITY"];
                         bill.name_material = (string)dataReader["NAME_MATERIAL"];
                         bill.name_unit = (string)dataReader["NAME_UNIT"];
@@ -69,8 +70,9 @@ namespace Alexon_Service.ModelCtr
                         bill.code_material = (string)dataReader["CODE_MATERIAL"];
                         bill.code_unit = (string)dataReader["CODE_UNIT"];
                         bill.date_make = (string)dataReader["DATE_MAKE"];
+                        bill.deliver = (string)dataReader["DELIVER"];
                         bill.receiver = (string)dataReader["RECEIVER"];
-                        bill.note = (string)dataReader["NOTE"];
+                        bill.note = (string)dataReader["NOTE"].ToString();
                         bill.quantity = (decimal)dataReader["QUANTITY"];
                         bill.name_material = (string)dataReader["NAME_MATERIAL"];
                         bill.name_unit = (string)dataReader["NAME_UNIT"];
