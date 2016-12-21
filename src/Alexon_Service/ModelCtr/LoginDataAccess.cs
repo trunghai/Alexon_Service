@@ -34,6 +34,8 @@ namespace Alexon_Service.ModelCtr
             DbParameter fullnameParamter = base.GetParameterOut("@FULL_NAME", SqlDbType.NVarChar, "", ParameterDirection.Output);
             DbParameter emailParamter = base.GetParameterOut("@EMAIL", SqlDbType.NVarChar, "", ParameterDirection.Output);
             DbParameter addressParamter = base.GetParameterOut("@ADDRESS", SqlDbType.NVarChar, "", ParameterDirection.Output);
+            DbParameter ecodeParamter = base.GetParameterOut("@ECODE", SqlDbType.NVarChar, "", ParameterDirection.Output);
+            DbParameter descParamter = base.GetParameterOut("@DESC", SqlDbType.NVarChar, "", ParameterDirection.Output);
 
             parameterList.Add(userParams);
             parameterList.Add(passParams);
@@ -42,6 +44,8 @@ namespace Alexon_Service.ModelCtr
             parameterList.Add(fullnameParamter);
             parameterList.Add(emailParamter);
             parameterList.Add(addressParamter);
+            parameterList.Add(ecodeParamter);
+            parameterList.Add(descParamter);
 
 
             base.ExecuteNonQuery("PROC_LOGIN", parameterList, CommandType.StoredProcedure);
@@ -50,8 +54,8 @@ namespace Alexon_Service.ModelCtr
             user.email = (string)emailParamter.Value;
             user.address = (string)addressParamter.Value;
 
-            entity.respCode = "0";
-            entity.respContent = "Giao dịch thành công";
+            entity.respCode = (string)ecodeParamter.Value;
+            entity.respContent = (string)descParamter.Value;
             entity.info = user;
             return entity;
         }
