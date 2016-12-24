@@ -36,7 +36,7 @@ namespace Alexon_Service.Controllers
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody]string value)
+        public void Post([FromBody]MaterialLiqui value)
         {
         }
 
