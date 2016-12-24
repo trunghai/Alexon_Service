@@ -165,6 +165,10 @@ namespace Alexon_Service.ModelCtr
             codeMaterailTypeNode.InnerText = material.code_material_type;
             materialNode.AppendChild(codeMaterailTypeNode);
 
+            XmlNode codeUintNode = xmlDoc.CreateElement("code_unit");
+            codeUintNode.InnerText = material.code_unit;
+            materialNode.AppendChild(codeUintNode);
+
             XmlNode unitNode = xmlDoc.CreateElement("unit");
             unitNode.InnerText = material.unit;
             materialNode.AppendChild(unitNode);

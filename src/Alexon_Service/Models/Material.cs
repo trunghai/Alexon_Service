@@ -11,6 +11,7 @@ namespace Alexon_Service.Models
         public String code { get; set; }
         public String name { get; set; }
         public String code_material_type { get; set; }
+        public String code_unit { get; set;}
         public String unit { get; set; }
         public String production_countries { get; set; }
         public String code_symbols { get; set; }
