@@ -64,5 +64,35 @@ namespace Alexon_Service.ModelCtr
             entity.respContent = "Thành công";
             return entity;
         }
+
+        public Entity materialLiqui(String[] ids)
+        {
+            Entity entity = new Entity();
+
+            for(var i = 0; i < ids.Length; i++)
+            {
+                List<DbParameter> parameterList = new List<DbParameter>();
+                DbParameter xmlParams = base.GetParameter("@ID", ids[i]);
+                DbParameter codeParams = base.GetParameterOut("@ECODE", SqlDbType.NVarChar, null, ParameterDirection.Output);
+                DbParameter descParams = base.GetParameterOut("@DESC", SqlDbType.NVarChar, null, ParameterDirection.Output);
+                parameterList.Add(xmlParams);
+                parameterList.Add(codeParams);
+                parameterList.Add(descParams);
+                try
+                {
+                    base.ExecuteNonQuery("PROC_UPDATE_MATERIAL_LIQUI", parameterList, CommandType.StoredProcedure);
+                    entity.respCode = (string)codeParams.Value;
+                    entity.respContent = (string)descParams.Value;
+                }
+                catch (Exception e)
+                {
+                    entity.respCode = "10";
+                    entity.respContent = "Thêm mới không thành công";
+                    break;
+                }
+            }
+
+            return entity;
+        }
     }
 }

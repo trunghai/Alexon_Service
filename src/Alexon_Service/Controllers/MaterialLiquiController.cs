@@ -36,8 +36,12 @@ namespace Alexon_Service.Controllers
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody]MaterialLiqui value)
+        public Entity Post([FromBody]MaterialLiqui value)
         {
+            String[] ids = value.ids.Split(',');
+            MaterialLiquiDataAccess dataAccess = new MaterialLiquiDataAccess(_settings.ConnectionString);
+            return dataAccess.materialLiqui(ids);
+
         }
 
         // PUT api/values/5
