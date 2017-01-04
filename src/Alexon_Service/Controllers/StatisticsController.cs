@@ -21,10 +21,10 @@ namespace Alexon_Service.Controllers
         }
         // GET: api/values
         [HttpGet]
-        public Entity Get(String codeunit)
+        public Entity Get(String codeunit, String startDate, String endDate)
         {
             StatisticsDataAccess dataAccess = new StatisticsDataAccess(_settings.ConnectionString);
-            return dataAccess.getAllMaterial(codeunit);
+            return dataAccess.getAllMaterial(codeunit, startDate, endDate);
         }
 
         // GET api/values/5

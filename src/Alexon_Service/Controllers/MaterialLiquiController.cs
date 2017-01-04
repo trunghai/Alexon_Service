@@ -21,10 +21,10 @@ namespace Alexon_Service.Controllers
         }
         // GET: api/values
         [HttpGet]
-        public Entity Get(String page, String pageSize, String codeMaterialType)
+        public Entity Get(String page, String pageSize, String codeMaterialType , String keySearch)
         {
             MaterialLiquiDataAccess dataAccess = new MaterialLiquiDataAccess(_settings.ConnectionString);
-            return dataAccess.getMaterialLiqui(page, pageSize, codeMaterialType);
+            return dataAccess.getMaterialLiqui(page, pageSize, codeMaterialType, keySearch);
         }
 
         // GET api/values/5

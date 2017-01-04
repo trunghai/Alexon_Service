@@ -52,14 +52,19 @@ namespace Alexon_Service.ModelCtr
 
             DbParameter codeParams = base.GetParameter("@CODE", code);
             DbParameter nameParams = base.GetParameter("@NAME", name);
+            DbParameter ecodeParams = base.GetParameterOut("@ECODE", SqlDbType.NVarChar, null, ParameterDirection.Output);
+            DbParameter descParams = base.GetParameterOut("@DESC", SqlDbType.NVarChar, null, ParameterDirection.Output);
+
             parameterList.Add(codeParams);
             parameterList.Add(nameParams);
+            parameterList.Add(ecodeParams);
+            parameterList.Add(descParams);
 
             try
             {
                 base.ExecuteNonQuery("PROC_ADD_MATERIAL_TYPE", parameterList, CommandType.StoredProcedure);
-                entity.respCode = "0";
-                entity.respContent = "Thêm mới thành công";
+                entity.respCode = (string)ecodeParams.Value;
+                entity.respContent = (string)descParams.Value;
             }
             catch(Exception e)
             {

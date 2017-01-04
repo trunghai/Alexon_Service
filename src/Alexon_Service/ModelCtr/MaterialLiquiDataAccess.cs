@@ -15,7 +15,7 @@ namespace Alexon_Service.ModelCtr
         {
         }
 
-        public Entity getMaterialLiqui(String page, String pageSize, String codeMaterialType)
+        public Entity getMaterialLiqui(String page, String pageSize, String codeMaterialType, String keySearch)
         {
             Entity entity = new Entity();
             List<Material> listMaterial = new List<Material>();
@@ -24,10 +24,12 @@ namespace Alexon_Service.ModelCtr
             DbParameter pageParamter = base.GetParameterOut("@PAGE", SqlDbType.Int, page, ParameterDirection.Input);
             DbParameter pageSizeParamter = base.GetParameterOut("@PAGESIZE", SqlDbType.Int, pageSize, ParameterDirection.Input);
             DbParameter codeParamter = base.GetParameterOut("@CODE_MATERIAL_TYPE", SqlDbType.NVarChar, codeMaterialType, ParameterDirection.Input);
+            DbParameter keySearchParamter = base.GetParameterOut("@KEYSEARCH", SqlDbType.NVarChar, keySearch, ParameterDirection.Input);
 
             parameterList.Add(pageParamter);
             parameterList.Add(pageSizeParamter);
             parameterList.Add(codeParamter);
+            parameterList.Add(keySearchParamter);
 
             using (DbDataReader dataReader = base.GetDataReader("PROC_GET_MATERIAL_LIQUI", parameterList, CommandType.StoredProcedure))
             {

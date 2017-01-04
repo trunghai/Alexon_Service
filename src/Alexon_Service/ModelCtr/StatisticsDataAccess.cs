@@ -16,15 +16,19 @@ namespace Alexon_Service.ModelCtr
 
         }
 
-        public Entity getAllMaterial(String codeunit)
+        public Entity getAllMaterial(String codeunit, String startDate, String endDate )
         {
             Entity entity = new Entity();
             List<Material> listMaterial = new List<Material>();
 
             List<DbParameter> parameterList = new List<DbParameter>();
-            DbParameter pageParamter = base.GetParameterOut("@CODE_UNIT", SqlDbType.NVarChar, codeunit, ParameterDirection.Input);
+            DbParameter codeParamter = base.GetParameterOut("@CODE_UNIT", SqlDbType.NVarChar, codeunit, ParameterDirection.Input);
+            DbParameter startParamter = base.GetParameterOut("@STARTDATE", SqlDbType.DateTime, startDate, ParameterDirection.Input);
+            DbParameter endParamter = base.GetParameterOut("@ENDDATE", SqlDbType.DateTime, endDate, ParameterDirection.Input);
 
-            parameterList.Add(pageParamter);
+            parameterList.Add(codeParamter);
+            parameterList.Add(startParamter);
+            parameterList.Add(endParamter);
 
             using (DbDataReader dataReader = base.GetDataReader("PROC_GET_ALL_MATERIAL", parameterList, CommandType.StoredProcedure))
             {
